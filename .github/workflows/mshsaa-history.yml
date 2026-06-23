@@ -20,14 +20,12 @@ jobs:
         run: pip install requests beautifulsoup4
  
       - name: Run scraper
-        run: |
-          cd mshsaa-history
-          python scrape_mshsaa_history.py --input teams_to_scrape.csv --output history_results.json
+        run: python scrape_mshsaa_history.py --input teams_to_scrape_template.csv --output history_results.json
  
       - name: Commit results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add mshsaa-history/history_results.json
+          git add history_results.json
           git diff --staged --quiet || git commit -m "Update MSHSAA history results"
           git push
