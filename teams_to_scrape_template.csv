@@ -1,0 +1,261 @@
+school_id,school_name,sport,alg_id
+517,De Smet Jesuit,Football,19
+511,Cardinal Ritter,Football,19
+529,Lutheran North,Football,19
+514,Christian Brothers College,Football,19
+546,St. Mary's South Side,Football,19
+559,Valle Catholic,Football,19
+522,Helias Catholic,Football,19
+531,MICDS,Football,19
+551,St. Pius X (Kansas City),Football,19
+528,Lutheran St. Charles,Football,19
+810,Lift for Life Academy Charter,Football,19
+542,St. Dominic,Football,19
+554,St. Vincent,Football,19
+512,Chaminade College Prep,Football,19
+518,Duchesne,Football,19
+783,Summit Christian Academy,Football,19
+540,Rockhurst,Football,19
+543,St. Francis Borgia,Football,19
+564,Westminster Christian Academy,Football,19
+917,Father Tolton,Football,19
+570,Pembroke Hill,Football,19
+511,Cardinal Ritter,Boys Basketball,5
+512,Chaminade College Prep,Boys Basketball,5
+783,Summit Christian Academy,Boys Basketball,5
+917,Father Tolton,Boys Basketball,5
+564,Westminster Christian Academy,Boys Basketball,5
+538,Principia,Boys Basketball,5
+514,Christian Brothers College,Boys Basketball,5
+522,Helias Catholic,Boys Basketball,5
+570,Pembroke Hill,Boys Basketball,5
+508,Barstow,Boys Basketball,5
+517,De Smet Jesuit,Boys Basketball,5
+529,Lutheran North,Boys Basketball,5
+574,New Heights Christian,Boys Basketball,5
+530,Lutheran South,Boys Basketball,5
+542,St. Dominic,Boys Basketball,5
+567,Greenwood,Boys Basketball,5
+551,St. Pius X (Kansas City),Boys Basketball,5
+556,Thomas Jefferson Independent Day,Boys Basketball,5
+810,Lift for Life Academy Charter,Boys Basketball,5
+510,Bishop LeBlond,Boys Basketball,5
+531,MICDS,Boys Basketball,5
+541,Springfield Catholic,Boys Basketball,5
+524,John Burroughs,Boys Basketball,5
+1608,KIPP KC Legacy,Boys Basketball,5
+534,Notre Dame (Cape Girardeau),Boys Basketball,5
+812,Veritas Christian Academy,Boys Basketball,5
+528,Lutheran St. Charles,Boys Basketball,5
+543,St. Francis Borgia,Boys Basketball,5
+559,Valle Catholic,Boys Basketball,5
+972,St. Michael the Archangel,Boys Basketball,5
+518,Duchesne,Boys Basketball,5
+547,SLUH,Boys Basketball,5
+573,Sacred Heart,Boys Basketball,5
+540,Rockhurst,Boys Basketball,5
+560,Vianney,Boys Basketball,5
+479,University Academy Charter,Boys Basketball,5
+546,St. Mary's South Side,Boys Basketball,5
+552,St. Pius X (Festus),Boys Basketball,5
+509,Bishop DuBourg,Boys Basketball,5
+539,Priory,Boys Basketball,5
+554,St. Vincent,Boys Basketball,5
+550,St. Paul Lutheran (Concordia),Boys Basketball,5
+568,McAuley Catholic,Boys Basketball,5
+523,Incarnate Word Academy,Girls Basketball,6
+810,Lift for Life Academy Charter,Girls Basketball,6
+565,Whitfield,Girls Basketball,6
+528,Lutheran St. Charles,Girls Basketball,6
+524,John Burroughs,Girls Basketball,6
+534,Notre Dame (Cape Girardeau),Girls Basketball,6
+515,Cor Jesu Academy,Girls Basketball,6
+522,Helias Catholic,Girls Basketball,6
+538,Principia,Girls Basketball,6
+510,Bishop LeBlond,Girls Basketball,6
+554,St. Vincent,Girls Basketball,6
+547,St. Teresa's Academy,Girls Basketball,6
+972,St. Michael the Archangel,Girls Basketball,6
+558,Ursuline Academy,Girls Basketball,6
+551,St. Pius X (Kansas City),Girls Basketball,6
+552,St. Pius X (Festus),Girls Basketball,6
+531,MICDS,Girls Basketball,6
+555,Saxony Lutheran,Girls Basketball,6
+568,McAuley Catholic,Girls Basketball,6
+574,New Heights Christian,Girls Basketball,6
+511,Cardinal Ritter,Girls Basketball,6
+518,Duchesne,Girls Basketball,6
+530,Lutheran South,Girls Basketball,6
+564,Westminster Christian Academy,Girls Basketball,6
+544,St. Joseph's Academy,Girls Basketball,6
+550,St. Paul Lutheran (Concordia),Girls Basketball,6
+971,St. Joseph Christian,Girls Basketball,6
+536,Notre Dame de Sion,Girls Basketball,6
+570,Pembroke Hill,Girls Basketball,6
+529,Lutheran North,Girls Basketball,6
+508,Barstow,Girls Basketball,6
+542,St. Dominic,Girls Basketball,6
+479,University Academy Charter,Girls Basketball,6
+509,Bishop DuBourg,Girls Basketball,6
+562,Visitation Academy,Girls Basketball,6
+556,Thomas Jefferson Independent Day,Girls Basketball,6
+917,Father Tolton,Girls Basketball,6
+994,St. Paul Lutheran (Farmington),Girls Basketball,6
+1189,KIPP St. Louis Sr.,Girls Basketball,6
+540,Rockhurst,Boys Soccer,33
+565,Whitfield,Boys Soccer,33
+517,De Smet Jesuit,Boys Soccer,33
+543,St. Francis Borgia,Boys Soccer,33
+524,John Burroughs,Boys Soccer,33
+542,St. Dominic,Boys Soccer,33
+514,Christian Brothers College,Boys Soccer,33
+534,Notre Dame (Cape Girardeau),Boys Soccer,33
+538,Principia,Boys Soccer,33
+785,Guadalupe Centers Charter,Boys Soccer,33
+528,Lutheran St. Charles,Boys Soccer,33
+509,Bishop DuBourg,Boys Soccer,33
+518,Duchesne,Boys Soccer,33
+541,Springfield Catholic,Boys Soccer,33
+972,St. Michael the Archangel,Boys Soccer,33
+531,MICDS,Boys Soccer,33
+533,New Covenant Academy,Boys Soccer,33
+564,Westminster Christian Academy,Boys Soccer,33
+547,SLUH,Boys Soccer,33
+539,Priory,Boys Soccer,33
+550,St. Paul Lutheran (Concordia),Boys Soccer,33
+551,St. Pius X (Kansas City),Boys Soccer,33
+555,Saxony Lutheran,Boys Soccer,33
+917,Father Tolton,Boys Soccer,33
+570,Pembroke Hill,Boys Soccer,33
+552,St. Pius X (Festus),Boys Soccer,33
+783,Summit Christian Academy,Boys Soccer,33
+574,New Heights Christian,Boys Soccer,33
+560,Vianney,Boys Soccer,33
+569,Missouri Military Academy,Boys Soccer,33
+508,Barstow,Boys Soccer,33
+522,Helias Catholic,Boys Soccer,33
+530,Lutheran South,Boys Soccer,33
+567,Greenwood,Boys Soccer,33
+812,Veritas Christian Academy,Boys Soccer,33
+510,Bishop LeBlond,Boys Soccer,33
+512,Chaminade College Prep,Boys Soccer,33
+549,St. Mary's South Side,Boys Soccer,33
+573,Sacred Heart,Boys Soccer,33
+529,Lutheran North,Boys Soccer,33
+552,St. Pius X (Festus),Girls Volleyball,57
+510,Bishop LeBlond,Girls Volleyball,57
+564,Westminster Christian Academy,Girls Volleyball,57
+523,Incarnate Word Academy,Girls Volleyball,57
+542,St. Dominic,Girls Volleyball,57
+559,Valle Catholic,Girls Volleyball,57
+515,Cor Jesu Academy,Girls Volleyball,57
+543,St. Francis Borgia,Girls Volleyball,57
+812,Veritas Christian Academy,Girls Volleyball,57
+528,Lutheran St. Charles,Girls Volleyball,57
+972,St. Michael the Archangel,Girls Volleyball,57
+554,St. Vincent,Girls Volleyball,57
+532,Nerinx Hall,Girls Volleyball,57
+536,Notre Dame de Sion,Girls Volleyball,57
+555,Saxony Lutheran,Girls Volleyball,57
+558,Ursuline Academy,Girls Volleyball,57
+550,St. Paul Lutheran (Concordia),Girls Volleyball,57
+524,John Burroughs,Girls Volleyball,57
+551,St. Pius X (Kansas City),Girls Volleyball,57
+570,Pembroke Hill,Girls Volleyball,57
+541,Springfield Catholic,Girls Volleyball,57
+971,St. Joseph Christian,Girls Volleyball,57
+534,Notre Dame (Cape Girardeau),Girls Volleyball,57
+541,Rosati-Kain,Girls Volleyball,57
+547,St. Teresa's Academy,Girls Volleyball,57
+562,Visitation Academy,Girls Volleyball,57
+573,Sacred Heart,Girls Volleyball,57
+769,Calvary Lutheran,Girls Volleyball,57
+522,Helias Catholic,Girls Volleyball,57
+574,New Heights Christian,Girls Volleyball,57
+535,Notre Dame (St. Louis),Girls Volleyball,57
+544,St. Joseph's Academy,Girls Volleyball,57
+565,Whitfield,Girls Volleyball,57
+511,Cardinal Ritter,Girls Volleyball,57
+783,Summit Christian Academy,Girls Volleyball,57
+529,Lutheran North,Girls Volleyball,57
+919,School of the Ozarks,Girls Volleyball,57
+97,Hogan Prep Academy Charter,Girls Volleyball,57
+556,Thomas Jefferson Independent Day,Girls Volleyball,57
+518,Duchesne,Girls Volleyball,57
+531,MICDS,Girls Volleyball,57
+522,Helias Catholic,Fall Softball,38
+917,Father Tolton,Fall Softball,38
+523,Incarnate Word Academy,Fall Softball,38
+534,Notre Dame (Cape Girardeau),Fall Softball,38
+564,Westminster Christian Academy,Fall Softball,38
+543,St. Francis Borgia,Fall Softball,38
+515,Cor Jesu Academy,Fall Softball,38
+509,Bishop DuBourg,Fall Softball,38
+541,Rosati-Kain,Fall Softball,38
+542,St. Dominic,Fall Softball,38
+552,St. Pius X (Festus),Fall Softball,38
+530,Lutheran South,Fall Softball,38
+555,Saxony Lutheran,Fall Softball,38
+917,Father Tolton,Baseball,3
+541,Springfield Catholic,Baseball,3
+551,St. Pius X (Kansas City),Baseball,3
+524,John Burroughs,Baseball,3
+518,Duchesne,Baseball,3
+783,Summit Christian Academy,Baseball,3
+543,St. Francis Borgia,Baseball,3
+573,Sacred Heart,Baseball,3
+514,Christian Brothers College,Baseball,3
+531,MICDS,Baseball,3
+560,Vianney,Baseball,3
+1660,Faith Christian Academy,Baseball,3
+539,Priory,Baseball,3
+559,Valle Catholic,Baseball,3
+530,Lutheran South,Baseball,3
+1022,Northland Christian,Baseball,3
+508,Barstow,Baseball,3
+517,De Smet Jesuit,Baseball,3
+528,Lutheran St. Charles,Baseball,3
+510,Bishop LeBlond,Baseball,3
+522,Helias Catholic,Baseball,3
+550,St. Paul Lutheran (Concordia),Baseball,3
+552,St. Pius X (Festus),Baseball,3
+540,Rockhurst,Baseball,3
+567,Greenwood,Baseball,3
+972,St. Michael the Archangel,Baseball,3
+542,St. Dominic,Baseball,3
+971,St. Joseph Christian,Baseball,3
+574,New Heights Christian,Baseball,3
+559,Valle Catholic,Spring Softball,68
+574,New Heights Christian,Spring Softball,68
+532,Nerinx Hall,Girls Soccer,34
+542,St. Dominic,Girls Soccer,34
+515,Cor Jesu Academy,Girls Soccer,34
+558,Ursuline Academy,Girls Soccer,34
+565,Whitfield,Girls Soccer,34
+972,St. Michael the Archangel,Girls Soccer,34
+522,Helias Catholic,Girls Soccer,34
+536,Notre Dame de Sion,Girls Soccer,34
+524,John Burroughs,Girls Soccer,34
+554,St. Vincent,Girls Soccer,34
+528,Lutheran St. Charles,Girls Soccer,34
+541,Springfield Catholic,Girls Soccer,34
+508,Barstow,Girls Soccer,34
+531,MICDS,Girls Soccer,34
+552,St. Pius X (Festus),Girls Soccer,34
+551,St. Pius X (Kansas City),Girls Soccer,34
+555,Saxony Lutheran,Girls Soccer,34
+917,Father Tolton,Girls Soccer,34
+783,Summit Christian Academy,Girls Soccer,34
+544,St. Joseph's Academy,Girls Soccer,34
+510,Bishop LeBlond,Girls Soccer,34
+535,Notre Dame (St. Louis),Girls Soccer,34
+547,St. Teresa's Academy,Girls Soccer,34
+561,Villa Duchesne,Girls Soccer,34
+523,Incarnate Word Academy,Girls Soccer,34
+530,Lutheran South,Girls Soccer,34
+533,New Covenant Academy,Girls Soccer,34
+567,Greenwood,Girls Soccer,34
+534,Notre Dame (Cape Girardeau),Girls Soccer,34
+509,Bishop DuBourg,Girls Soccer,34
+543,St. Francis Borgia,Girls Soccer,34
+570,Pembroke Hill,Girls Soccer,34
