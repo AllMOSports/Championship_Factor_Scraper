@@ -1,13 +1,13 @@
 """
 scrape_mshsaa_history.py
-
+ 
 Scrapes MSHSAA "Activity History" pages (ActivityHistory.aspx) for a list of
 school/sport combinations and extracts, for every season:
   - Year, Record, Winning %, Home/Away/Neutral splits, PPG, Opponent PPG
   - Any postseason placement icons attached to that season (e.g. "District
     Champion", "State Champion", "State Runner-Up", etc.) read directly from
     the icon's `title` attribute -- no color/class guessing required.
-
+ 
 INPUT
 -----
 A CSV with columns: school_id,school_name,sport,alg_id
@@ -15,12 +15,12 @@ A CSV with columns: school_id,school_name,sport,alg_id
   - school_name -> any label you want in the output (not used in the request)
   - sport       -> any label you want in the output (e.g. "Football")
   - alg_id      -> MSHSAA "alg" URL parameter for that sport (numeric)
-
+ 
 One row per (school, sport) you want scraped. For 50-75 schools across 9
 sports that's up to ~675 rows. The script is safe to re-run -- by default it
 skips (school_id, sport) combos already present in --output, so if it dies
 partway through (or you add more rows later) you can just run it again.
-
+ 
 OUTPUT
 ------
 A JSON file: a list of records, one per (school, sport, year), e.g.:
@@ -38,29 +38,29 @@ A JSON file: a list of records, one per (school, sport, year), e.g.:
     "opp_ppg": "16.5",
     "placements": ["District Champion"]
   }
-
+ 
 A separate JSON file of any failed (school, sport) combos is written too, so
 you can inspect/retry just those instead of re-running everything.
-
+ 
 USAGE
 -----
     pip install requests beautifulsoup4
     python scrape_mshsaa_history.py --input teams_to_scrape.csv --output history_results.json
-
+ 
 Designed to drop straight into a GitHub Actions job: no interactive prompts,
 predictable logging, retry/backoff for flaky responses, resumable output.
 """
-
+ 
 import argparse
 import csv
 import json
 import logging
 import time
 from pathlib import Path
-
+ 
 import requests
 from bs4 import BeautifulSoup
-
+ 
 BASE_URL = "https://www.mshsaa.org/MySchool/ActivityHistory.aspx"
 HEADERS = {
     "User-Agent": (
@@ -68,25 +68,25 @@ HEADERS = {
         "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
     )
 }
-
+ 
 # Be polite -- this is a small public ASP.NET site, not an API meant for bulk hits.
 REQUEST_DELAY_SECONDS = 1.5
 REQUEST_TIMEOUT_SECONDS = 15
 MAX_RETRIES = 3
 RETRY_BACKOFF_SECONDS = 4
-
+ 
 # Only keep seasons within this range (inclusive). Override with --min-year/--max-year.
 DEFAULT_MIN_YEAR = 2020
 DEFAULT_MAX_YEAR = 2026
-
+ 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
 )
 log = logging.getLogger(__name__)
-
-
+ 
+ 
 def fetch_html(url: str) -> str:
     """Fetch a URL with retries + backoff. Raises on final failure."""
     last_exc = None
@@ -101,8 +101,55 @@ def fetch_html(url: str) -> str:
             if attempt < MAX_RETRIES:
                 time.sleep(RETRY_BACKOFF_SECONDS * attempt)
     raise RuntimeError(f"Failed to fetch {url} after {MAX_RETRIES} attempts") from last_exc
-
-
+ 
+ 
+# Known placement icons that carry NO title attribute -- the placement is encoded
+# purely in the CSS class instead (e.g. "fas fa-trophy-alt gold xxl no-padding" for
+# State Champion). Add to this dict as more class signatures are confirmed.
+KNOWN_ICON_CLASS_LABELS = {
+    frozenset(["fa-trophy-alt", "gold"]): "State Champion",
+    frozenset(["fa-trophy-alt", "silver"]): "State Runner-Up",
+    frozenset(["fa-trophy-alt", "bronze"]): "State 3rd Place",
+    frozenset(["fa-trophy-alt", "black"]): "State 4th Place",
+}
+ 
+ 
+def label_icon(icon):
+    """Return a human-readable placement label for a single <i> icon element.
+ 
+    Prefers the `title` attribute when present (e.g. "District Champion").
+    Falls back to matching known CSS class signatures (e.g. State Champion,
+    which has no title at all). If an icon matches neither, its raw class
+    string is returned instead of silently dropping it -- so new placement
+    types show up in the output for manual confirmation rather than vanishing.
+    """
+    title = (icon.get("title") or "").strip()
+    if title:
+        return title
+ 
+    classes = set(icon.get("class", []))
+    if not classes:
+        return None
+ 
+    for class_signature, label in KNOWN_ICON_CLASS_LABELS.items():
+        if class_signature.issubset(classes):
+            return label
+ 
+    return f"Unrecognized icon ({' '.join(sorted(classes))})"
+ 
+ 
+def find_icon_elements(tr):
+    """Find every Font-Awesome icon element in a row, regardless of tag name.
+ 
+    MSHSAA uses <i> for some placement icons (e.g. District Champion) and
+    <span> for others (e.g. State 4th Place) -- both carry an "fa-..." class,
+    so we match on that instead of assuming a specific tag.
+    """
+    return tr.find_all(
+        lambda tag: tag.has_attr("class") and any(c.startswith("fa-") for c in tag["class"])
+    )
+ 
+ 
 def find_history_table(soup: BeautifulSoup):
     """Locate the detailed-history table by matching its header row (Year + Record)."""
     for table in soup.find_all("table"):
@@ -114,12 +161,12 @@ def find_history_table(soup: BeautifulSoup):
         if "year" in header_cells and "record" in header_cells:
             return table, header_cells
     return None, []
-
-
+ 
+ 
 def parse_history_page(html: str, school_id: str, school_name: str, sport: str,
                         min_year: int = DEFAULT_MIN_YEAR, max_year: int = DEFAULT_MAX_YEAR):
     """Parse a single ActivityHistory.aspx page into a list of season records.
-
+ 
     Only seasons where min_year <= year <= max_year are kept -- the page
     itself returns full history (2008-present), so filtering happens here
     rather than by changing the request.
@@ -129,41 +176,41 @@ def parse_history_page(html: str, school_id: str, school_name: str, sport: str,
     if table is None:
         log.warning("No history table found for %s / %s (s=%s)", school_name, sport, school_id)
         return []
-
+ 
     # Map header name -> column index (the icon column has a blank header, so it's skipped here
     # and handled separately below via the <i title="..."> search)
     col_index = {name: i for i, name in enumerate(header_cells) if name}
-
+ 
     rows_out = []
     for tr in table.find_all("tr"):
         cells = tr.find_all("td")
         if not cells:
             continue  # header row, no <td>s
-
-        # Placement icons: any <i> with a non-empty title, anywhere in the row.
-        # This is intentionally generic -- it will pick up "District Champion",
-        # "State Champion", "State Runner-Up", etc. without needing to know the
-        # full label set in advance, and handles multiple icons in one row too.
+ 
+        # Placement icons: every Font-Awesome icon element in the row (regardless
+        # of whether it's an <i> or <span>), labeled via label_icon() -- which
+        # checks title first, then known CSS class signatures, then falls back
+        # to surfacing the raw class so nothing is silently dropped.
         placements = [
-            icon.get("title", "").strip()
-            for icon in tr.find_all("i")
-            if icon.get("title", "").strip()
+            label for icon in find_icon_elements(tr)
+            for label in [label_icon(icon)]
+            if label
         ]
-
+ 
         def cell_text(col_name):
             idx = col_index.get(col_name)
             if idx is None or idx >= len(cells):
                 return ""
             return cells[idx].get_text(strip=True)
-
+ 
         year_text = cell_text("year")
         if not year_text or not year_text[:4].isdigit():
             continue  # not a real data row
-
+ 
         year = int(year_text[:4])
         if year < min_year or year > max_year:
             continue  # outside the requested range
-
+ 
         rows_out.append({
             "school_id": school_id,
             "school_name": school_name,
@@ -179,8 +226,8 @@ def parse_history_page(html: str, school_id: str, school_name: str, sport: str,
             "placements": placements,
         })
     return rows_out
-
-
+ 
+ 
 def load_input_rows(path: Path):
     with path.open(newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
@@ -189,8 +236,8 @@ def load_input_rows(path: Path):
         if missing:
             raise ValueError(f"Input CSV missing columns: {missing}")
         return list(reader)
-
-
+ 
+ 
 def main():
     parser = argparse.ArgumentParser(description="Scrape MSHSAA ActivityHistory pages.")
     parser.add_argument("--input", default="teams_to_scrape.csv", help="Input CSV path")
@@ -205,14 +252,14 @@ def main():
     parser.add_argument("--max-year", type=int, default=DEFAULT_MAX_YEAR,
                          help="Latest season to keep (inclusive)")
     args = parser.parse_args()
-
+ 
     input_path = Path(args.input)
     output_path = Path(args.output)
     errors_path = Path(args.errors)
-
+ 
     rows = load_input_rows(input_path)
     log.info("Loaded %d (school, sport) combos from %s", len(rows), input_path)
-
+ 
     existing_results = []
     skip_keys = set()
     if output_path.exists() and not args.overwrite:
@@ -223,23 +270,23 @@ def main():
                 log.info("Resuming: %d combos already scraped, will skip them", len(skip_keys))
         except (json.JSONDecodeError, OSError):
             existing_results = []
-
+ 
     all_results = list(existing_results)
     failed = []
-
+ 
     for i, row in enumerate(rows, start=1):
         school_id = row["school_id"].strip()
         school_name = row["school_name"].strip()
         sport = row["sport"].strip()
         alg_id = row["alg_id"].strip()
         key = (school_id, sport)
-
+ 
         if key in skip_keys:
             continue
-
+ 
         url = f"{BASE_URL}?s={school_id}&alg={alg_id}"
         log.info("[%d/%d] %s / %s (s=%s, alg=%s)", i, len(rows), school_name, sport, school_id, alg_id)
-
+ 
         try:
             html = fetch_html(url)
             season_rows = parse_history_page(html, school_id, school_name, sport,
@@ -250,18 +297,18 @@ def main():
             log.error("  -> FAILED: %s", exc)
             failed.append({"school_id": school_id, "school_name": school_name,
                             "sport": sport, "alg_id": alg_id, "url": url, "error": str(exc)})
-
+ 
         time.sleep(args.delay)
-
+ 
     output_path.write_text(json.dumps(all_results, indent=2), encoding="utf-8")
     log.info("Wrote %d season records to %s", len(all_results), output_path)
-
+ 
     if failed:
         errors_path.write_text(json.dumps(failed, indent=2), encoding="utf-8")
         log.warning("%d combos failed -- see %s to retry just those", len(failed), errors_path)
     elif errors_path.exists():
         errors_path.unlink()
-
-
+ 
+ 
 if __name__ == "__main__":
     main()
