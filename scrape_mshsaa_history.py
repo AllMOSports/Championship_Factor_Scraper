@@ -4,9 +4,18 @@ scrape_mshsaa_history.py
 Scrapes MSHSAA "Activity History" pages (ActivityHistory.aspx) for a list of
 school/sport combinations and extracts, for every season:
   - Year, Record, Winning %, Home/Away/Neutral splits, PPG, Opponent PPG
-  - Any postseason placement icons attached to that season (e.g. "District
-    Champion", "State Champion", "State Runner-Up", etc.) read directly from
-    the icon's `title` attribute -- no color/class guessing required.
+  - Every postseason placement attached to that season:
+      District Champion, State Champion, State Runner-Up,
+      State 3rd Place, State 4th Place
+    These icons are NOT all marked up the same way on MSHSAA's pages --
+    District Champion carries a `title` attribute directly; the four
+    State-level placements have no title at all and are identified purely
+    by CSS class (color + icon variant), and one of them (State 4th Place)
+    even uses a <span> instead of an <i> tag. The parser checks title first,
+    then falls back to a known-class lookup, and as a last resort surfaces
+    any *unrecognized* icon's raw class string instead of silently dropping
+    it -- so a 6th placement type we haven't seen yet would show up in the
+    output as "Unrecognized icon (...)" rather than vanishing.
  
 INPUT
 -----
@@ -17,26 +26,34 @@ A CSV with columns: school_id,school_name,sport,alg_id
   - alg_id      -> MSHSAA "alg" URL parameter for that sport (numeric)
  
 One row per (school, sport) you want scraped. For 50-75 schools across 9
-sports that's up to ~675 rows. The script is safe to re-run -- by default it
-skips (school_id, sport) combos already present in --output, so if it dies
-partway through (or you add more rows later) you can just run it again.
+sports that's up to ~675 rows.
+ 
+RE-RUNNING / RESUMING
+----------------------
+By default, this script skips (school_id, sport) combos already present in
+--output, so a partial run can be safely continued. IMPORTANT: if you're
+re-running this after a code change that affects parsing (like the
+placement-detection logic), pass --overwrite (or delete the existing output
+file) so every row gets re-scraped with the updated logic -- otherwise
+already-cached rows keep whatever was parsed under the OLD code and never
+get refreshed.
  
 OUTPUT
 ------
 A JSON file: a list of records, one per (school, sport, year), e.g.:
   {
-    "school_id": "554",
-    "school_name": "St. Vincent",
-    "sport": "Football",
-    "year": 2023,
-    "record": "9-4",
-    "win_pct": "69.2%",
-    "home": "3-1",
-    "away": "6-2",
-    "neutral": "0-1",
-    "ppg": "33.4",
-    "opp_ppg": "16.5",
-    "placements": ["District Champion"]
+    "school_id": "538",
+    "school_name": "Principia",
+    "sport": "Girls Basketball",
+    "year": 2026,
+    "record": "30-2",
+    "win_pct": "93.8%",
+    "home": "4-1",
+    "away": "4-0",
+    "neutral": "22-1",
+    "ppg": "65.8",
+    "opp_ppg": "44",
+    "placements": ["State Champion"]
   }
  
 A separate JSON file of any failed (school, sport) combos is written too, so
@@ -45,6 +62,11 @@ you can inspect/retry just those instead of re-running everything.
 USAGE
 -----
     pip install requests beautifulsoup4
+ 
+    # Fresh full re-scrape (use this after the placement-detection fix):
+    python scrape_mshsaa_history.py --input teams_to_scrape.csv --output history_results.json --overwrite
+ 
+    # Normal resumable run (skips combos already in --output):
     python scrape_mshsaa_history.py --input teams_to_scrape.csv --output history_results.json
  
 Designed to drop straight into a GitHub Actions job: no interactive prompts,
@@ -174,7 +196,15 @@ def parse_history_page(html: str, school_id: str, school_name: str, sport: str,
     soup = BeautifulSoup(html, "html.parser")
     table, header_cells = find_history_table(soup)
     if table is None:
+        # Surface what we actually got back instead of just "not found" --
+        # this distinguishes a genuine no-data page from a block/rate-limit
+        # page, a captcha, or a structural change on MSHSAA's end.
+        page_title = soup.title.get_text(strip=True) if soup.title else "(no <title>)"
+        visible_text = soup.get_text(separator=" ", strip=True)
+        snippet = visible_text[:300]
         log.warning("No history table found for %s / %s (s=%s)", school_name, sport, school_id)
+        log.warning("  Page title: %s", page_title)
+        log.warning("  HTML length: %d chars | Visible text snippet: %s", len(html), snippet)
         return []
  
     # Map header name -> column index (the icon column has a blank header, so it's skipped here
